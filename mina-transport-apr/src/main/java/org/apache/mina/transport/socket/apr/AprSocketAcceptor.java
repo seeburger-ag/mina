@@ -22,6 +22,7 @@ package org.apache.mina.transport.socket.apr;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.nio.channels.spi.SelectorProvider;
 import java.util.Iterator;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -49,7 +50,7 @@ import org.apache.tomcat.jni.Status;
  * @author <a href="http://mina.apache.org">Apache MINA Project</a>
  */
 public final class AprSocketAcceptor extends AbstractPollingIoAcceptor<AprSession, Long> implements SocketAcceptor {
-    /** 
+    /**
      * This constant is deduced from the APR code. It is used when the timeout
      * has expired while doing a poll() operation.
      */
@@ -80,11 +81,11 @@ public final class AprSocketAcceptor extends AbstractPollingIoAcceptor<AprSessio
     }
 
     /**
-     * Constructor for {@link AprSocketAcceptor} using default parameters, and 
+     * Constructor for {@link AprSocketAcceptor} using default parameters, and
      * given number of {@link AprIoProcessor} for multithreading I/O operations.
-     * 
+     *
      * @param processorCount the number of processor to create and place in a
-     * {@link SimpleIoProcessorPool} 
+     * {@link SimpleIoProcessorPool}
      */
     public AprSocketAcceptor(int processorCount) {
         super(new DefaultSocketSessionConfig(), AprIoProcessor.class, processorCount);
@@ -103,8 +104,8 @@ public final class AprSocketAcceptor extends AbstractPollingIoAcceptor<AprSessio
     }
 
     /**
-     *  Constructor for {@link AprSocketAcceptor} with a given {@link Executor} for handling 
-     *  connection events and a given {@link AprIoProcessor} for handling I/O events, useful for 
+     *  Constructor for {@link AprSocketAcceptor} with a given {@link Executor} for handling
+     *  connection events and a given {@link AprIoProcessor} for handling I/O events, useful for
      *  sharing the same processor and executor over multiple {@link IoService} of the same type.
      * @param executor the executor for connection
      * @param processor the processor for I/O operations
@@ -373,5 +374,12 @@ public final class AprSocketAcceptor extends AbstractPollingIoAcceptor<AprSessio
      */
     private void throwException(int code) throws IOException {
         throw new IOException(org.apache.tomcat.jni.Error.strerror(-code) + " (code: " + code + ")");
+    }
+
+    @Override
+    protected void init(SelectorProvider selectorProvider)
+        throws Exception
+    {
+        init();
     }
 }

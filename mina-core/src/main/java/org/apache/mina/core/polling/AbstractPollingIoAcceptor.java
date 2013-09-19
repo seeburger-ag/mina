@@ -21,6 +21,7 @@ package org.apache.mina.core.polling;
 
 import java.net.SocketAddress;
 import java.nio.channels.ClosedSelectorException;
+import java.nio.channels.spi.SelectorProvider;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -109,7 +110,7 @@ public abstract class AbstractPollingIoAcceptor<S extends AbstractIoSession, H> 
      *            type.
      */
     protected AbstractPollingIoAcceptor(IoSessionConfig sessionConfig, Class<? extends IoProcessor<S>> processorClass) {
-        this(sessionConfig, null, new SimpleIoProcessorPool<S>(processorClass), true);
+        this(sessionConfig, null, new SimpleIoProcessorPool<S>(processorClass), true, null);
     }
 
     /**
@@ -128,9 +129,27 @@ public abstract class AbstractPollingIoAcceptor<S extends AbstractIoSession, H> 
      */
     protected AbstractPollingIoAcceptor(IoSessionConfig sessionConfig, Class<? extends IoProcessor<S>> processorClass,
             int processorCount) {
-        this(sessionConfig, null, new SimpleIoProcessorPool<S>(processorClass, processorCount), true);
+        this(sessionConfig, null, new SimpleIoProcessorPool<S>(processorClass, processorCount), true, null);
     }
 
+    /**
+     * Constructor for {@link AbstractPollingIoAcceptor}. You need to provide a default
+     * session configuration, a class of {@link IoProcessor} which will be instantiated in a
+     * {@link SimpleIoProcessorPool} for using multiple thread for better scaling in multiprocessor
+     * systems.
+     *
+     * @see SimpleIoProcessorPool
+     *
+     * @param sessionConfig
+     *            the default configuration for the managed {@link IoSession}
+     * @param processorClass a {@link Class} of {@link IoProcessor} for the associated {@link IoSession}
+     *            type.
+     * @param processorCount the amount of processor to instantiate for the pool
+     */
+    protected AbstractPollingIoAcceptor(IoSessionConfig sessionConfig, Class<? extends IoProcessor<S>> processorClass,
+            int processorCount, SelectorProvider selectorProvider ) {
+        this(sessionConfig, null, new SimpleIoProcessorPool<S>(processorClass, processorCount, selectorProvider), true, selectorProvider);
+    }
     /**
      * Constructor for {@link AbstractPollingIoAcceptor}. You need to provide a default
      * session configuration, a default {@link Executor} will be created using
@@ -144,7 +163,7 @@ public abstract class AbstractPollingIoAcceptor<S extends AbstractIoSession, H> 
      *            events to the bound {@link IoHandler} and processing the chains of {@link IoFilter}
      */
     protected AbstractPollingIoAcceptor(IoSessionConfig sessionConfig, IoProcessor<S> processor) {
-        this(sessionConfig, null, processor, false);
+        this(sessionConfig, null, processor, false, null);
     }
 
     /**
@@ -164,7 +183,7 @@ public abstract class AbstractPollingIoAcceptor<S extends AbstractIoSession, H> 
      *            events to the bound {@link IoHandler} and processing the chains of {@link IoFilter}
      */
     protected AbstractPollingIoAcceptor(IoSessionConfig sessionConfig, Executor executor, IoProcessor<S> processor) {
-        this(sessionConfig, executor, processor, false);
+        this(sessionConfig, executor, processor, false, null);
     }
 
     /**
@@ -187,7 +206,7 @@ public abstract class AbstractPollingIoAcceptor<S extends AbstractIoSession, H> 
      * will be automatically disposed
      */
     private AbstractPollingIoAcceptor(IoSessionConfig sessionConfig, Executor executor, IoProcessor<S> processor,
-            boolean createdProcessor) {
+            boolean createdProcessor, SelectorProvider selectorProvider) {
         super(sessionConfig, executor);
 
         if (processor == null) {
@@ -199,7 +218,7 @@ public abstract class AbstractPollingIoAcceptor<S extends AbstractIoSession, H> 
 
         try {
             // Initialize the selector
-            init();
+            init(selectorProvider);
 
             // The selector is now ready, we can switch the
             // flag to true so that incoming connection can be accepted
@@ -224,6 +243,12 @@ public abstract class AbstractPollingIoAcceptor<S extends AbstractIoSession, H> 
      * @throws Exception any exception thrown by the underlying system calls
      */
     protected abstract void init() throws Exception;
+
+    /**
+     * Initialize the polling system, will be called at construction time.
+     * @throws Exception any exception thrown by the underlying system calls
+     */
+    protected abstract void init(SelectorProvider selectorProvider) throws Exception;
 
     /**
      * Destroy the polling system, will be called when this {@link IoAcceptor}
