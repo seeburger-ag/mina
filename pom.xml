@@ -36,7 +36,7 @@
     <url>http://mina.apache.org/</url>
   </organization>
 
-  <groupId>org.apache.mina</groupId>
+  <groupId>com.seeburger.apache.mina</groupId>
   <version>2.0.7.SEE1-SNAPSHOT</version>
   <artifactId>mina-parent</artifactId>
   <name>Apache MINA</name>
@@ -51,16 +51,21 @@
   </issueManagement>
 
   <scm>
-    <connection>scm:svn:https://svn.apache.org/repos/asf/mina/mina/tags/2.0.7</connection>
-    <url>scm:svn:https://svn.apache.org/repos/asf/mina/mina/tags/2.0.7</url>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/mina/mina/tags/2.0.7</developerConnection>
+    <connection>scm:git:git@github.com:seeburger-ag/mina.git</connection>
+    <developerConnection>scm:git:git@github.com:seeburger-ag/mina.git</developerConnection>
+    <url>scm:git:git@github.com:seeburger-ag/mina.git</url>
   </scm>
 
+  <!-- SEEBURGER repository changes -->
   <distributionManagement>
-    <site>
-      <id>apache.websites</id>
-      <url>scp://people.apache.org/www/mina.apache.org/report/trunk/</url>
-    </site>
+    <repository>
+      <id>release</id>
+      <url>http://repo.seeburger.de/archiva/repository/release/</url>
+    </repository>
+    <snapshotRepository>
+      <id>snapshot</id>
+      <url>http://repo.seeburger.de/archiva/repository/snapshot/</url>
+    </snapshotRepository>
   </distributionManagement>
 
   <ciManagement>
@@ -85,6 +90,8 @@
   <!-- Define the version for each of the used jar and maven plugins -->
   <properties>
     <arguments />
+
+    <original.groupId>org.apache.mina</original.groupId>
 
     <!-- Maven Plugins -->
     <version.apache.rat.plugin>0.8</version.apache.rat.plugin>

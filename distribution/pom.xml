@@ -23,7 +23,7 @@
   
   <parent>
     <artifactId>mina-parent</artifactId>
-    <groupId>org.apache.mina</groupId>
+    <groupId>com.seeburger.apache.mina</groupId>
     <version>2.0.7.SEE1-SNAPSHOT</version>
   </parent>
 
