@@ -37,7 +37,7 @@
   </organization>
 
   <groupId>com.seeburger.apache.mina</groupId>
-  <version>2.0.7.SEE1-SNAPSHOT</version>
+  <version>2.0.7.SEE1</version>
   <artifactId>mina-parent</artifactId>
   <name>Apache MINA</name>
   <packaging>pom</packaging>
@@ -54,6 +54,7 @@
     <connection>scm:git:git@github.com:seeburger-ag/mina.git</connection>
     <developerConnection>scm:git:git@github.com:seeburger-ag/mina.git</developerConnection>
     <url>scm:git:git@github.com:seeburger-ag/mina.git</url>
+    <tag>mina-parent-2.0.7.SEE1</tag>
   </scm>
 
   <!-- SEEBURGER repository changes -->
