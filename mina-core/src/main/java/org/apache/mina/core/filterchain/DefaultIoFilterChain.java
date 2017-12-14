@@ -465,7 +465,10 @@ public class DefaultIoFilterChain implements IoFilterChain {
         } else {
             // Please note that this place is not the only place that
             // calls ConnectFuture.setException().
-            session.close(true);
+            if (!session.isClosing()) {
+                // Call the closeNow method only if needed - https://issues.apache.org/jira/browse/DIRMINA-1021
+                session.close(true);
+            }
             future.setException(cause);
         }
     }
