@@ -127,7 +127,7 @@
     <version.project.plugin>3.0-alpha-2</version.project.plugin>
     <version.project.info.plugin>2.5</version.project.info.plugin>
     <version.rat.maven.plugin>1.0-alpha-3</version.rat.maven.plugin>
-    <version.release.plugin>2.3.2</version.release.plugin>
+    <version.release.plugin>2.5.2</version.release.plugin>
     <version.remote.resources.plugin>1.3</version.remote.resources.plugin>
     <version.resources.plugin>2.6</version.resources.plugin>
     <version.scm.plugin>1.7</version.scm.plugin>
